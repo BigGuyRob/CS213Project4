@@ -13,12 +13,14 @@ public class Order {
 		this.totalPrice = 0;
 	}
 	
-	public double calculatePrice() {
+	private double calculatePrice() {
 		double price = 0;
 		for(Pizza p : order) {
 			price += p.price();
 		}
 		price += price * Constants.SALES_TAX;
+		String o = String.format("%,.2f", price);
+		price = Double.parseDouble(o);
 		return price;
 	}
 	
@@ -31,16 +33,16 @@ public class Order {
 	}
 	
 	public double getPrice() {
-		return this.totalPrice;
+		return calculatePrice();
 	}
 	
 	@Override
 	public String toString() {
-		String str = phoneNumber + ":/n";
+		String str = phoneNumber + ":\n";
 		for(Pizza p : order) {
-			str += p.toString() + ":/n";
+			str += p.toString() + ":\n";
 		}
-		str += this.totalPrice;
+		str += "Price: " +this.getPrice();
 		return str;
 	}
 	

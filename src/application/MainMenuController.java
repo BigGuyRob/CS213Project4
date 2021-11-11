@@ -35,6 +35,7 @@ public class MainMenuController {
 	@FXML private Button btnCart;
 	@FXML private Button btnStoreOrders;
 	@FXML private ListView<String> lvOrders;
+	@FXML private Button btnComplete;
 	private Order focus;
 	private int cartNum = 0;
 	private StoreOrders storeOrders = new StoreOrders();
@@ -60,6 +61,8 @@ public class MainMenuController {
 		rdbPepperoni.setDisable(status);
 		rdbPepperoni.setSelected(true);
 		rdbPepperoni.setSelected(false);
+		btnStoreOrders.setDisable(status);
+		btnComplete.setDisable(status);;
 	}
 	
 	@FXML
@@ -74,7 +77,6 @@ public class MainMenuController {
 				CartScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 				Stage primaryStage = new Stage();
 				primaryStage.setOnHidden(e-> cartController.shutdown());
-				primaryStage.initStyle(StageStyle.UTILITY);
 				primaryStage.setTitle("Current Order");
 				endisableNewOrder(true);
 				endisableNewPizzaRDB(true);
@@ -83,29 +85,43 @@ public class MainMenuController {
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
+		}else {
+			outputArea.setText("Cart is empty.");
 		}
 	}
 	
 	@FXML
+	private void completeOrder(ActionEvent event) {
+		if(lvOrders.getSelectionModel().getSelectedItem() !=null) {
+			storeOrders.completeOrder(storeOrders.getOrder(lvOrders.getSelectionModel().getSelectedIndex()));
+			updateLVOrders();
+		}else {
+			outputArea.setText("No order selected.");
+		}
+	}
+	@FXML
 	private void viewStoreOrders(ActionEvent event) {
-		if(storeOrders.getOrders().size() >0) {
+		if(storeOrders.getOrders().size() > 0) {
 			try {
+				txtOrderID.setDisable(true);
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("StoreOrdersView.fxml"));
 				BorderPane StoreOrders = (BorderPane) loader.load();
-				PizzaCustomizationController StoreOrdersController = loader.getController();
-				StoreOrdersController.setMainController(this);
-				Scene PizzaScene = new Scene(StoreOrders,600,400);
-				PizzaScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+				StoreOrdersController StoreordersController = loader.getController();
+				StoreordersController.setMainMenuController(this);
+				Scene StoreOrder = new Scene(StoreOrders,600,400);
+				StoreOrder.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 				Stage primaryStage = new Stage();
-				primaryStage.setOnHidden(e-> StoreOrdersController.shutdown());
+				primaryStage.setOnHidden(e-> StoreordersController.shutdown());
 				primaryStage.setTitle("All Store Orders");
 				endisableNewOrder(true);
 				endisableNewPizzaRDB(true);
-				primaryStage.setScene(PizzaScene);
+				primaryStage.setScene(StoreOrder);
 				primaryStage.show(); 
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
+		}else {
+			outputArea.setText("There are no current store orders.");
 		}
 	}
 	
@@ -125,9 +141,11 @@ public class MainMenuController {
 				primaryStage.setTitle("Pizza Customizer");
 				endisableNewOrder(true);
 				endisableNewPizzaRDB(true);
+				outputArea.setText("");
 				if(focus == null) {
 					focus = new Order(txtOrderID.getText());
 					cartNum = 0;
+					txtOrderID.setDisable(true);
 				}
 				primaryStage.setScene(PizzaScene);
 				primaryStage.show(); 
@@ -178,6 +196,7 @@ public class MainMenuController {
 	
 	public void addtoStoreOrders(Order order) {
 		storeOrders.addOrder(order);
+		clearFocus();
 	}
 	
 	public void clearFocus() {
@@ -185,6 +204,9 @@ public class MainMenuController {
 		cartNum = 0;
 		btnCart.setText("Cart");
 		txtOrderID.setText("");
+		endisableNewPizzaRDB(false);
+		txtOrderID.setDisable(false);
+		updateLVOrders();
 	}
 	
 	public void updateCartNum(int num) {
@@ -192,17 +214,20 @@ public class MainMenuController {
 	}
 	
 	private void updateLVOrders() {
+		ObservableList<String> lvElem = FXCollections.observableArrayList();
 		if((storeOrders.getOrders()).size() != 0) {
 			ArrayList<Order> Orders = storeOrders.getOrders();
-			ObservableList<String> lvElem = FXCollections.observableArrayList();
 			for(Order o : Orders) {
 				lvElem.add(o.getOrderID());
 			}
+			lvOrders.setItems(lvElem);
+		}else {
 			lvOrders.setItems(lvElem);
 		}
 	}
 	
 	public void reFocus() {
+		outputArea.setText("");
 		updateLVOrders();
 		endisableNewPizzaRDB(false);
 		if(cartNum == 0) {
@@ -214,6 +239,7 @@ public class MainMenuController {
 			btnCart.setDisable(false);
 		}
 	}
+	
 	
 	public void addPizzatoOrder(Pizza pizza) {
 		focus.addPizza(pizza);

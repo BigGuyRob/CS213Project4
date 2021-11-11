@@ -3,11 +3,16 @@ package Pizzas;
 import java.util.ArrayList;
 
 import application.Constants;
-
+/**
+ * Pepperoni Pizza class contains logic from Abstract class Pizza relating
+ * to interacting with Pepperoni Pizza object
+ * @author Robert Reid, Anthony Romanushko
+ *
+ */
 public class Pepperoni extends Pizza{
 	private String pizzaType = "Pepperoni";
 	/** 
-	 * 
+	 * Constructor method for Pepperoni pizza object
 	 * @param SIZE - String size of pizza, small, medium, large
 	 * @param TOPPING - - ArrayList<String> toppings of pizza max length 7, handled in pizza maker class
 	 */
@@ -16,8 +21,10 @@ public class Pepperoni extends Pizza{
 		this.toppings = TOPPING;
 		this.price = price();
 	}
+	
 	/**
-	 * Method for calculating price of Pepperoni pizza
+	 * Method for calculating the price of pepperoni
+	 * @return price of pepperoni as double
 	 */
 	@Override
 	public double price() {
@@ -33,13 +40,14 @@ public class Pepperoni extends Pizza{
 		if(numToppings > Constants.pepperoniIncludedToppings) {
 			price += Constants.toppingPrice * (numToppings - Constants.pepperoniIncludedToppings);
 		}
-		int n = (int)(price * 100);
-		price = (double) n/100;
+		String o = String.format("%,.2f", price);
+		price = Double.parseDouble(o);
 		return price;
 	}
 
 	/**
-	 * Method for returning Pepperoni pizza to string
+	 * Method for returning Pepperoni object as string
+	 * @return String representation of Pepperoni object
 	 */
 	@Override
 	public String toString() {
@@ -47,8 +55,10 @@ public class Pepperoni extends Pizza{
 		str += pizzaType + ":" + size.name() +":Toppings" + toppings.toString() + ":Price[" + String.valueOf(price) + "]";
 		return str;
 	}
+	
 	/**
-	 * Method for updating toppings for pepperoni pizza
+	 * Method for updating the toppings on the pepperoni
+	 * @param TOPPINGS ArrayList<Topping> of toppings on the pepperoni
 	 */
 	@Override
 	public void updateToppings(ArrayList<Topping> TOPPINGS) {
@@ -56,8 +66,10 @@ public class Pepperoni extends Pizza{
 		this.price = price();
 	
 	}
+	
 	/**
-	 * Method for updating size for pepperoni pizza
+	 * Method for updating the size of the pepperoni
+	 * @param size - Enum size for the pepperoni to be updated to
 	 */
 	@Override
 	public void updateSize(Size SIZE) {
@@ -66,15 +78,28 @@ public class Pepperoni extends Pizza{
 		
 	}
 	
+	/**
+	 * Method for getting the current toppings on the pepperoni
+	 * @return ArrayList<Topping> of toppings on the pepperoni
+	 */
 	@Override
 	public ArrayList<Topping> getToppings() {
 		return this.toppings;
 	}
 	
+	/**
+	 * Method for getting the current size of the pepperoni
+	 * @return Enum size of the pepperoni
+	 */
 	@Override
 	public Size getSize() {
 		return this.size;
 	}
+	
+	/**
+	 * Method for getting the type of the pepperoni
+	 * @return type of pepperoni as string
+	 */
 	@Override
 	public String getType() {
 		return "pepperoni";

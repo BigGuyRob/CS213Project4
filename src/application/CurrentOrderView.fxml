@@ -26,7 +26,7 @@
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" text="Remove Selected" />
+                  <Button mnemonicParsing="false" onAction="#removePizza" text="Remove Selected" />
                </children>
             </HBox>
          </children>
@@ -38,11 +38,13 @@
             <HBox prefHeight="50.0" prefWidth="600.0">
                <children>
                   <Label text="  Subtotal Total: " />
-                  <Label text="Label" />
-                  <Label text="  Order Total: Subtotal * " />
-                  <Label text="Tax Rate" />
+                  <Label fx:id="lblsubtotal1" text="Label" />
+                  <Label text="  Order Total: " />
+                  <Label fx:id="lblsubtotal2" text="Label" />
+                  <Label text="*" />
+                  <Label fx:id="lbltaxRate" text="Tax Rate" />
                   <Label text=" = " />
-                  <Label text="Label" />
+                  <Label fx:id="lbltotal" text="Label" />
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
@@ -50,7 +52,7 @@
                   <Label text="  " />
                   <Button mnemonicParsing="false" onAction="#placeOrder" text="Place Order" />
                   <Label text="   " />
-                  <Button mnemonicParsing="false" text="Cancel Order" />
+                  <Button fx:id="btnCancelOrder" mnemonicParsing="false" onAction="#cancelOrder" text="Cancel Order" />
                   <Label text="  " />
                </children>
             </HBox>

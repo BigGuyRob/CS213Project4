@@ -2,10 +2,16 @@ package Pizzas;
 import java.util.ArrayList;
 
 import application.Constants;
+/**
+ * PizzaMaker class contains logic for creating different instances 
+ * of Abstract class Pizza
+ * @author Robert Reid, Anthony Romanushko
+ *
+ */
 public class PizzaMaker {
 	
 	/**
-	 * 
+	 * Method for constructing any type of Pizza object
 	 * @param flavor - Flavor of pizza
 	 * @param size - SIze enum of pizza
 	 * @param TOPPINGS - ArrayList<Topping> toppings of pizza

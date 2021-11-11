@@ -30,7 +30,11 @@ public class CurrentOrderController {
 	private Pizza selectedPizza;
 	@FXML private ListView<String>lvOrder;
 	@FXML private Label lblOrderID;
-	
+	@FXML private Label lblsubtotal1;
+	@FXML private Label lblsubtotal2;
+	@FXML private Label lbltaxRate;
+	@FXML private Label lbltotal;
+	@FXML private Button btnCancelOrder;
 	
 	public void setMainController(MainMenuController mainMenuController) {
 		this.stage = mainMenuController;
@@ -44,34 +48,6 @@ public class CurrentOrderController {
 		return focus.getOrder().get(lvOrder.getSelectionModel().getSelectedIndex());
 	}
 	
-	@FXML
-	private void editPizza(ActionEvent event) {
-		if(lvOrder.getSelectionModel().getSelectedItem() == null) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setTitle("No pizza selected to edit");
-			alert.show();
-		}else {
-			selectedPizza = focus.getOrder().get(lvOrder.getSelectionModel().getSelectedIndex());
-			try {
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("PizzaCustomizationView.fxml"));
-				BorderPane PizzaCustomizer = (BorderPane) loader.load();
-				PizzaCustomizationController pizzaController = loader.getController();
-				pizzaController.setCurrentOrderController(this);
-				Scene PizzaScene = new Scene(PizzaCustomizer,600,400);
-				PizzaScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-				Stage primaryStage = new Stage();
-				primaryStage.setOnHidden(e-> pizzaController.shutdown());
-				primaryStage.initStyle(StageStyle.UTILITY);
-				primaryStage.setTitle("Pizza Customizer");
-				primaryStage.setScene(PizzaScene);
-				primaryStage.show(); 
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-	}
-	
 	private void closeScene() {
 		Stage closestage = (Stage) lblOrderID.getScene().getWindow();
 		closestage.close();
@@ -83,11 +59,21 @@ public class CurrentOrderController {
 	}
 	
 	public void populate() {
+		String sales_tax = "6.625%";
+		double total = 0;
 		ArrayList<Pizza> Pizzas = focus.getOrder();
 		ObservableList<String> lvElem = FXCollections.observableArrayList();
 		for(Pizza p : Pizzas) {
+			total += p.price();
 			lvElem.add(p.toString());
 		}
+		String str = total+"";
+		lblsubtotal1.setText(str);
+		lblsubtotal2.setText(str);
+		str = sales_tax;
+		lbltaxRate.setText(str);
+		str = String.format("%,.2f", focus.getPrice());
+		lbltotal.setText(str);
 		lvOrder.setItems(lvElem);
 	}
 	
@@ -105,15 +91,37 @@ public class CurrentOrderController {
 		return data;
 	}
 	
+	@FXML private void cancelOrder(ActionEvent event) {
+		try {
+			stage.clearFocus();
+			closeScene();
+		}catch (NullPointerException e){
+			//do nothing
+		}
+	}
 	@FXML
 	private void placeOrder(ActionEvent event) {
 		try {
 			stage.addtoStoreOrders(focus);
 			closeScene();
 		}catch (NullPointerException e) {
-			
+			//do nothing
 		}
 	}
 	
-	
+	@FXML
+	private void removePizza(ActionEvent event) {
+		if(lvOrder.getSelectionModel().getSelectedItem() !=null) {
+			ArrayList<Pizza> pizzas = focus.getOrder();
+			Pizza temp = pizzas.get(lvOrder.getSelectionModel().getSelectedIndex());
+			focus.removePizza(temp);
+			stage.updateCartNum(-1);
+			if(focus.getOrder().size() > 0) {
+				populate();
+			}else {
+				stage.clearFocus();
+				closeScene();
+			}
+		}
+	}
 }
