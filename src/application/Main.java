@@ -8,9 +8,15 @@ import javafx.scene.layout.BorderPane;
 import Pizzas.Order;
 import Pizzas.StoreOrders;
 
+/**
+ * Main class contains logic for starting the main menu view
+ * @author Robert Reid, Anthony Romanushko
+ *
+ */
 public class Main extends Application {
-	private StoreOrders StoreOrders;
-	public Order focus;
+	/**
+	 * Method to start the main menu view on the start of the application
+	 */
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -25,6 +31,10 @@ public class Main extends Application {
 		}
 	}
 	
+	/**
+	 * Method which runs on start launches the application 
+	 * @param args - Arguments not used.
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}

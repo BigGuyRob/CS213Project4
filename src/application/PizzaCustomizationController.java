@@ -20,6 +20,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+/**
+ * PizzaCustomization Controller class contains logic for interacting with CurrentOrderView.fxml and 
+ * MainMenuController and its attributes
+ * @author Robert Reid, Anthony Romanushko
+ *
+ */
 public class PizzaCustomizationController {
 	private String[] data;
 	private MainMenuController stage;
@@ -63,6 +69,11 @@ public class PizzaCustomizationController {
 	private double smallScale = .6;
 	private double medScale = .8;
 	private double largeScale = 1;
+	
+	/**
+	 * Method to initialize values works as constructor for PizzaCustomizationController
+	 * @param stage - stage that created the instance of PizzaCustomizationController
+	 */
 	public void setMainController(MainMenuController stage) {
 		this.stage = stage;
 		this.data = (String[]) stage.getUserData();
@@ -72,6 +83,10 @@ public class PizzaCustomizationController {
 		displaySubtotal();
 	}
 	
+	/**
+	 * Method for setting the currentOrderController run on initialization of new order
+	 * @param controller - CurrentOrder controller passes data to this
+	 */
 	public void setCurrentOrderController(CurrentOrderController controller) {
 		tempPizza = passer.getSelectedPizza();
 		this.passer = controller;
@@ -82,12 +97,19 @@ public class PizzaCustomizationController {
 		displaySubtotal();
 	}
 	
+	/**
+	 * Method for calculating and displaying subtotal
+	 */
 	public void displaySubtotal() {
 		valuePizza = PizzaMaker.createPizza(pizzaType, parsers.parseSize(cbSize.getSelectionModel().getSelectedItem()), toppings);
 		String o = String.format("%,.2f", valuePizza.price());
 		subTotal.setText("$" + o);
 	}
 	
+	/**
+	 * Method for adding a pizza to order
+	 * @param event - on Add to Order button click
+	 */
 	@FXML
 	public void addToOrder(ActionEvent event) {
 		stage.addPizzatoOrder(valuePizza);
@@ -100,6 +122,10 @@ public class PizzaCustomizationController {
 		closeScene();
 	}
 	
+	/**
+	 * Method for updating the topping array for the current pizza and changing image
+	 * @param event - On topping checkbox check changed
+	 */
 	@FXML 
 	public void updateToppings(ActionEvent event) {
 		CheckBox source = (CheckBox)event.getSource();
@@ -121,12 +147,19 @@ public class PizzaCustomizationController {
 		displaySubtotal();
 	}
 	
+	/**
+	 * Method for updating the subtotal and image when the size of pizza is changed
+	 * @param event - On combobox selection changed
+	 */
 	@FXML 
 	public void updateSize(ActionEvent event) {
 		displaySubtotal();
 		setImageSize();
 	}
 	
+	/**
+	 * Method for updating the image size
+	 */
 	public void setImageSize()
 	{
 	    double newScale = 0;
@@ -140,16 +173,27 @@ public class PizzaCustomizationController {
 	    toppingPane.setScaleY(newScale);
 	}
 	
+	/**
+	 * Method for closing the PizzaCustomizationController and view
+	 */
 	public void closeScene() {
 		Stage closestage = (Stage) lblOrderID.getScene().getWindow();
 		closestage.close();
 	}
 	
+	/**
+	 * Method run on shutdown refocuses on main menu
+	 */
 	@FXML
 	public void shutdown() {
 	   stage.reFocus();
 	}
 	
+	/**
+	 * Method for updating the image of the pizza shown
+	 * @param topping - topping that was checked
+	 * @param setTo - boolean to display image
+	 */
 	public void modLayer(Topping topping, boolean setTo)
 	{
 	    switch(topping)
@@ -167,6 +211,10 @@ public class PizzaCustomizationController {
     	    case PINEAPPLE : pineapple.setVisible(setTo); break;
 	    }
 	}
+	
+	/**
+	 * Method for populating fields on PizzaCustomizationView
+	 */
 	public void populate() {
 		ObservableList<String> sizes = FXCollections.observableArrayList("small", "medium", "large");
 		cbSize.setItems(sizes);
@@ -200,6 +248,9 @@ public class PizzaCustomizationController {
 		}
 	}
 	
+	/**
+	 * Method for loading the preset topping array
+	 */
 	public void loadToppings() {
 		int dataStart = 3;
 		for(int x = dataStart; x < data.length; x++) {

@@ -1,5 +1,10 @@
 package Pizzas;
 
+/**
+ * Topping Enum is used as an attribute in the ArrayList<Topping> for pizza
+ * @author Robert Reid, Anthony Romanushko
+ *
+ */
 public enum Topping {
 	/**
      *  Pepperoni Topping

@@ -24,6 +24,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+/**
+ * MainMenuConntroller class contains logic for interacting with MainMenuView.fxml and 
+ * the other controller classes and their attributes
+ * @author Robert Reid, Anthony Romanushko
+ */
 public class MainMenuController {
 	@FXML private ToggleGroup tgPizzaType;
 	@FXML private RadioButton rdbDeluxe;
@@ -40,21 +45,37 @@ public class MainMenuController {
 	private int cartNum = 0;
 	private StoreOrders storeOrders = new StoreOrders();
 	
+	/**
+	 * Method to enable options on the Main Menu for creating a new order
+	 * @param event- on any of the rdbPizza buttons click
+	 */
 	@FXML
 	public void enableNewOrder(ActionEvent event) {
 		endisableNewOrder(false);
 	}
 	
+	/**
+	 * Method to disable options on the Main Menu view for creating new order
+	 * @param event - On rdbButtons none selected
+	 */
 	@FXML
 	public void disableNewOrder(ActionEvent event) {
 		endisableNewOrder(true);
 	}
 	
+	/**
+	 * Method for changing the status of New Order Button and Cart Button
+	 * @param status - status to setDisable
+	 */
 	public void endisableNewOrder(boolean status) {
 		btnNewOrder.setDisable(status);
 		btnCart.setDisable(status);
 	}
 	
+	/**
+	 * Method for enabling or disabling radio buttons on the main menu
+	 * @param status - status to setDisable rdbbuttons
+	 */
 	public void endisableNewPizzaRDB(boolean status) {
 		rdbDeluxe.setDisable(status);
 		rdbHawaiian.setDisable(status);
@@ -65,6 +86,11 @@ public class MainMenuController {
 		btnComplete.setDisable(status);;
 	}
 	
+	/**
+	 * Method for starting the Current Order View and viewing the 
+	 * order currently in progress
+	 * @param event - on Cart button click
+	 */
 	@FXML
 	private void viewCart(ActionEvent event) {
 		if(cartNum > 0) {
@@ -90,6 +116,10 @@ public class MainMenuController {
 		}
 	}
 	
+	/**
+	 * Method for completing the selected order and removing it from the store orders
+	 * @param - on complete Button click 
+	 */
 	@FXML
 	private void completeOrder(ActionEvent event) {
 		if(lvOrders.getSelectionModel().getSelectedItem() !=null) {
@@ -99,6 +129,11 @@ public class MainMenuController {
 			outputArea.setText("No order selected.");
 		}
 	}
+	
+	/**
+	 * Method for starting the Store Orders view and viewing all store orders
+	 * @param event - on View all orders button click
+	 */
 	@FXML
 	private void viewStoreOrders(ActionEvent event) {
 		if(storeOrders.getOrders().size() > 0) {
@@ -125,6 +160,10 @@ public class MainMenuController {
 		}
 	}
 	
+	/**
+	 * Method for creating a new order or adding to the current order
+	 * @param event - On New Pizza button click
+	 */
 	@FXML
 	private void newOrder(ActionEvent event) {
 		String errorMessage = validateOrder();
@@ -157,6 +196,10 @@ public class MainMenuController {
 		}
 	}
 	
+	/**
+	 * Method for validating that all fields on Main Menu have valid entries
+	 * @return - error message for checking fields on the Main Menu for creating new order
+	 */
 	private String validateOrder() {
 		int orderID = 0;
 		String retMes = "";
@@ -173,6 +216,10 @@ public class MainMenuController {
 		return retMes;
 	}
 	
+	/**
+	 * Method for taking the user entries and creating pizza object for customizer
+	 * @return - String[] representation of pizza object to pass to customizer
+	 */
 	public String[] getUserData() {
 		String orderID = txtOrderID.getText();
 		String[] pass;
@@ -186,19 +233,34 @@ public class MainMenuController {
 		return pass;
 	}
 	
+	/**
+	 * Method for returning order in progress
+	 * @return - Order currently being worked on Main Menu
+	 */
 	public Order getOrder() {
 		return this.focus;
 	}
 	
+	/**
+	 * Method for returning the store orders
+	 * @return - current StoreOrders object
+	 */
 	public StoreOrders getStoreOrders() {
 		return this.storeOrders;
 	}
 	
+	/**
+	 * Method for adding an order to store orders
+	 * @param order - Order to add to store orders
+	 */
 	public void addtoStoreOrders(Order order) {
 		storeOrders.addOrder(order);
 		clearFocus();
 	}
 	
+	/**
+	 * Method for clearing the order that is currently in progress if cancelled or completed
+	 */
 	public void clearFocus() {
 		focus = null;
 		cartNum = 0;
@@ -209,10 +271,17 @@ public class MainMenuController {
 		updateLVOrders();
 	}
 	
+	/**
+	 * Method for updating the number of pizzas in the cart
+	 * @param num - Number or pizzas added or removed from the order
+	 */
 	public void updateCartNum(int num) {
 		cartNum += num;
 	}
 	
+	/**
+	 * Method for updating the list of current orders in the store orders
+	 */
 	private void updateLVOrders() {
 		ObservableList<String> lvElem = FXCollections.observableArrayList();
 		if((storeOrders.getOrders()).size() != 0) {
@@ -226,6 +295,10 @@ public class MainMenuController {
 		}
 	}
 	
+	/**
+	 * Method for refocusing on this stage whenever another view is closed which decides which options 
+	 * to enable.
+	 */
 	public void reFocus() {
 		outputArea.setText("");
 		updateLVOrders();
@@ -240,7 +313,10 @@ public class MainMenuController {
 		}
 	}
 	
-	
+	/**
+	 * Method for adding a pizza to current order
+	 * @param pizza - Pizza to be added to order currently in progress
+	 */
 	public void addPizzatoOrder(Pizza pizza) {
 		focus.addPizza(pizza);
 	}

@@ -1,5 +1,10 @@
 package application;
 
+/**
+ * Constants class contains public constants used by many objects in the project
+ * @author Robert Reid, Anthony Romanushko
+ *
+ */
 public class Constants {
 	public static final double largePriceIncrease = 4.00;
 	public static final double mediumPriceIncrease = 2.00;

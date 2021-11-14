@@ -1,6 +1,4 @@
-1234567890:
-Deluxe:LARGE:Toppings[CHICKEN, SAUSAGE, PEPPERS, ONION, BACON]:Price[16.99]:
-Price: 18.12
-1234567891:
+6095315281:
 Hawaiian:LARGE:Toppings[CHICKEN, PINEAPPLE]:Price[14.99]:
-Price: 15.98
+Pepperoni:SMALL:Toppings[PEPPERONI]:Price[8.99]:
+Price: 25.57
